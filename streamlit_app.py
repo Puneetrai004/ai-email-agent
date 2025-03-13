@@ -91,7 +91,7 @@ with st.sidebar:
                     
                     # If response is a draft email, add to drafts
                     if "Here's a draft" in response:
-                        draft = response.split("``````" in response else response
+                        draft = response.split("``````")[1] if "``````" in response and len(response.split("``````")) > 1 else response
                         st.session_state.email_drafts.append(draft)
                         
                 except Exception as e:
