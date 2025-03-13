@@ -2,6 +2,7 @@ import streamlit as st
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 from langchain_groq import ChatGroq  # Import Groq instead of OpenAI
+from langchain_core.output_parsers import StrOutputParser
 
 class EmailAIAgent:
     """
@@ -35,6 +36,7 @@ class EmailAIAgent:
             Format the email with proper structure.
             """
         )
+        self.email_chain = self.email_template | self.llm | StrOutputParser()
         
         # Create email chain
         self.email_chain = LLMChain(llm=self.llm, prompt=self.email_template)
@@ -99,8 +101,8 @@ class EmailAIAgent:
                 "subject": subject,
                 "context": context
             })
-            
-            return f"Here's a draft email for you:\n\n``````\n\nYou can edit this draft before sending."
+            # And when using the result:
+            return f"Here's a draft email for you:\n\n``````\n{email_result}\n``````\n\nYou can edit this draft before sending."
             
         except Exception as e:
             return f"I couldn't generate an email draft: {str(e)}. Please check your Groq API key."
