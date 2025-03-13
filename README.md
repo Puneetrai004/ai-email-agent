@@ -1,19 +1,26 @@
-# 🎈 Blank app template
+# AI Email Agent
 
-A simple Streamlit app template for you to modify!
+An AI-powered assistant for managing personal emails using Streamlit, LangChain, and Groq.
 
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://blank-app-template.streamlit.app/)
+## Features
 
-### How to run it on your own machine
+- Email drafting and generation
+- Inbox summarization
+- Email categorization
+- Smart search functionality
+- User-friendly Streamlit interface
 
-1. Install the requirements
+## Demo
 
-   ```
-   $ pip install -r requirements.txt
-   ```
+Try the live demo: [AI Email Agent on Streamlit Cloud](https://ai-email-agent.streamlit.app)
 
-2. Run the app
+## Setup
 
-   ```
-   $ streamlit run streamlit_app.py
-   ```
+### Prerequisites
+
+- Python 3.8+
+- GitHub account (for deployment)
+
+### Local Development
+
+1. Clone the repository:
