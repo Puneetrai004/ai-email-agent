@@ -20,28 +20,35 @@ def main():
     st.title("📧 AI Email Agent")
     
     # Sidebar for configuration
-    with st.sidebar:
-        st.header("Configuration")
-        
-        # Email provider selection
-        email_provider = st.selectbox(
-            "Select Email Provider",
-            ["Gmail", "Outlook", "Custom SMTP"],
-            index=0
-        )
-        
-        # AI model selection
-        ai_model = st.selectbox(
-            "Select AI Model",
-            ["Groq (Free)", "OpenAI (Requires API Key)"],
-            index=0
-        )
-        
-        # API Key input if needed
-        if ai_model == "OpenAI (Requires API Key)":
-            api_key = st.text_input("OpenAI API Key", type="password")
-        else:
-            api_key = None
+    # In app.py, update the sidebar section:
+
+with st.sidebar:
+    st.header("Configuration")
+    
+    # Email provider selection
+    email_provider = st.selectbox(
+        "Select Email Provider",
+        ["Gmail", "Outlook", "Custom SMTP"],
+        index=0
+    )
+    
+    # AI model selection - change to Groq options
+    ai_model = st.selectbox(
+        "Select AI Model",
+        ["Groq - Llama 3 (8B)", "Groq - Mixtral (8x7B)"],
+        index=0
+    )
+    
+    # API Key input for Groq
+    groq_api_key = st.text_input("Groq API Key", 
+                               value=st.secrets.get("xai-SveSe6UyPDn1zSMzspehkB5UPBqHN6ht0RTaROpG1u4vU5YylKlNnMAnr8ejeEvsTRcq6bW5lPUcbM8U", ""),
+                               type="password",
+                               help="Get a free API key from groq.com")
+    
+    if groq_api_key:
+        st.success("API Key provided!")
+    else:
+        st.warning("Please enter your Groq API key")
             
         st.divider()
         st.markdown("### About")
@@ -74,7 +81,7 @@ def main():
                 
                 # Process the request with AI agent
                 try:
-                    agent = EmailAIAgent(api_key)
+                    agent = EmailAIAgent(api_key=groq_api_key)
                     response = agent.process_request(prompt)
                     
                     message_placeholder.markdown(response)
