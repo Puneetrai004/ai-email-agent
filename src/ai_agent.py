@@ -1,6 +1,5 @@
 import streamlit as st
-from langchain.chains import LLMChain
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq  # Import Groq instead of OpenAI
 from langchain_core.output_parsers import StrOutputParser
 
@@ -21,6 +20,7 @@ class EmailAIAgent:
         )
         
         # Create email drafting prompt template
+        # With:
         self.email_template = PromptTemplate(
             input_variables=["recipient", "subject", "context"],
             template="""
@@ -36,10 +36,6 @@ class EmailAIAgent:
             Format the email with proper structure.
             """
         )
-        self.email_chain = self.email_template | self.llm | StrOutputParser()
-        
-        # Create email chain
-        self.email_chain = LLMChain(llm=self.llm, prompt=self.email_template)
     
     def process_request(self, prompt):
         """Process a user request and generate a response using Groq LLM"""
@@ -96,13 +92,17 @@ class EmailAIAgent:
         
         # Generate the email using LangChain
         try:
-            email_result = self.email_chain.invoke({
-                "recipient": recipient,
-                "subject": subject,
-                "context": context
-            })
-            # And when using the result:
-            return f"Here's a draft email for you:\n\n``````\n{email_result}\n``````\n\nYou can edit this draft before sending."
+            # With:
+            email_result = self.llm.invoke(
+                self.email_template.format(
+                    recipient=recipient,
+                    subject=subject,
+                    context=context
+                )
+            )
+            # And when returning the result:
+            return f"Here's a draft email for you:\n\n``````\n{email_result.content}\n``````\n\nYou can edit this draft before sending."
+
             
         except Exception as e:
             return f"I couldn't generate an email draft: {str(e)}. Please check your Groq API key."
